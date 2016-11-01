@@ -7,8 +7,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by yd7581ku on 10/25/2016.
  */
-public class AVWSurvey extends JFrame
-{
+public class AVWSurvey extends JFrame {
     private JPanel rootPanel;
     private JTextField txtProgrammers;
     private JCheckBox cbxFixed;
@@ -25,55 +24,53 @@ public class AVWSurvey extends JFrame
         setContentPane(rootPanel);
         pack();
         setVisible(true);
+        //
         btnRecommendation.addActionListener(new ActionListener() {
             @Override
+            //recommend button click event handler
             public void actionPerformed(ActionEvent e) {
-
-                int p = getPositiveIntInput(txtProgrammers.getText());
-                if (p<=30&& !cbxIntergration.isSelected() && !cbxModel.isSelected()&&
-                        !cbxFixed.isSelected()&& cbxExperience.isSelected()&&cbxQuality.isSelected())
-                {
-
-                    lblResult.setText(txtName.getText()+" should use Agile methodology");
+                int p;
+                //try catch block to validate user integer input
+                try {
+                    p = Integer.parseInt(txtProgrammers.getText());
+                    if (p >= 0) {
+                    } else {
+                        //display dialog box to get valid data from user
+                        JOptionPane.showMessageDialog(AVWSurvey.this,
+                                "Please enter a positive numeric value");
+                        //remove bad data from textfield
+                        txtProgrammers.setText("");
+                        //put cursor in textfield for user friendly design
+                        txtProgrammers.requestFocus();
+                        return;
+                    }
+                    //catch invalid data type
+                } catch (NumberFormatException ime) {
+                    JOptionPane.showMessageDialog(AVWSurvey.this,
+                            "Please enter a numeric value");
+                    txtProgrammers.setText("");
+                    txtProgrammers.requestFocus();
+                    return;
                 }
-                else if (p>=30&& cbxIntergration.isSelected() && cbxModel.isSelected()&&
-                        cbxFixed.isSelected() &&!cbxExperience.isSelected() && !cbxQuality.isSelected())
-                {
+                //if statements to identify recommendations given user input
+                if (p <= 30 && !cbxIntergration.isSelected() && !cbxModel.isSelected() &&
+                        !cbxFixed.isSelected() && cbxExperience.isSelected() && cbxQuality.isSelected()) {
+                    //display recommendation in result label
+                    lblResult.setText(txtName.getText() + " should use Agile methodology");
+                } else if (p >= 30 && cbxIntergration.isSelected() && cbxModel.isSelected() &&
+                        cbxFixed.isSelected() && !cbxExperience.isSelected() && !cbxQuality.isSelected()) {
 
-                    lblResult.setText(txtName.getText()+" should use Waterfall methodology");
+                    lblResult.setText(txtName.getText() + " should use Waterfall methodology");
 
-                }
-                else
-                {
+                } else {
 
-                    lblResult.setText(txtName.getText()+ " should use Waterfall with Iteration");
-
+                    lblResult.setText(txtName.getText() + " should use Waterfall with Iteration");
 
                 }
             }
+
         });
+        // set behavior for when the close buttong is pressed
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-
-    private int getPositiveIntInput(String s) {
-        while (true) {
-            try {
-
-                int intInput = Integer.parseInt(s);
-                if (intInput >= 0) {
-                    return intInput;
-                } else {
-                    System.out.println("Please enter a positive numeric value");
-                    txtProgrammers.requestFocus();
-
-                    continue;
-                }
-            } catch (NumberFormatException ime) {
-                System.out.println("Please enter a valid Ticket ID#");
-            }
-
-        }
-
-    }
-
 }
